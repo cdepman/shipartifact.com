@@ -12,7 +12,7 @@ export interface Env {
   AI_RATE_LIMITER: RateLimiterBinding;
 }
 
-const DOMAIN = "shipartifact.com";
+const DOMAIN = "pushtostart.ai";
 
 const RESERVED_SUBDOMAINS = [
   "api",
@@ -117,7 +117,7 @@ function notFoundPage(slug: string): string {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Not Found — ShipArtifact</title>
+  <title>Not Found — PushToStart</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -140,7 +140,7 @@ function notFoundPage(slug: string): string {
   <div class="container">
     <h1>404</h1>
     <p>${slug}.${DOMAIN} does not exist yet.</p>
-    <a href="https://${DOMAIN}">Create it on ShipArtifact &rarr;</a>
+    <a href="https://${DOMAIN}">Create it on PushToStart &rarr;</a>
   </div>
 </body>
 </html>`;
@@ -194,7 +194,7 @@ export default {
       headers: {
         "Content-Type": "text/html; charset=utf-8",
         "Cache-Control": "public, max-age=60, s-maxage=60",
-        "X-Powered-By": "ShipArtifact",
+        "X-Powered-By": "PushToStart",
       },
     });
   },

@@ -19,13 +19,16 @@ dependencies:
     version: 2.1.1
   drizzle-orm:
     specifier: ^0.45.1
-    version: 0.45.1(@vercel/postgres@0.10.0)
+    version: 0.45.1(@vercel/postgres@0.10.0)(postgres@3.4.8)
   lucide-react:
     specifier: ^0.577.0
     version: 0.577.0(react@19.2.3)
   next:
     specifier: 16.1.6
     version: 16.1.6(@babel/core@7.29.0)(react-dom@19.2.3)(react@19.2.3)
+  postgres:
+    specifier: ^3.4.8
+    version: 3.4.8
   react:
     specifier: 19.2.3
     version: 19.2.3
@@ -46,6 +49,9 @@ devDependencies:
   '@types/react-dom':
     specifier: ^19
     version: 19.2.3(@types/react@19.2.14)
+  dotenv:
+    specifier: ^17.3.1
+    version: 17.3.1
   drizzle-kit:
     specifier: ^0.31.9
     version: 0.31.9
@@ -3204,6 +3210,11 @@ packages:
       esutils: 2.0.3
     dev: true
 
+  /dotenv@17.3.1:
+    resolution: {integrity: sha512-IO8C/dzEb6O3F9/twg6ZLXz164a2fhTnEWb95H23Dm4OuN+92NmEAlTrupP9VW6Jm3sO26tQlqyvyi4CsnY9GA==}
+    engines: {node: '>=12'}
+    dev: true
+
   /drizzle-kit@0.31.9:
     resolution: {integrity: sha512-GViD3IgsXn7trFyBUUHyTFBpH/FsHTxYJ66qdbVggxef4UBPHRYxQaRzYLTuekYnk9i5FIEL9pbBIwMqX/Uwrg==}
     hasBin: true
@@ -3216,7 +3227,7 @@ packages:
       - supports-color
     dev: true
 
-  /drizzle-orm@0.45.1(@vercel/postgres@0.10.0):
+  /drizzle-orm@0.45.1(@vercel/postgres@0.10.0)(postgres@3.4.8):
     resolution: {integrity: sha512-Te0FOdKIistGNPMq2jscdqngBRfBpC8uMFVwqjf6gtTVJHIQ/dosgV/CLBU2N4ZJBsXL5savCba9b0YJskKdcA==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
@@ -3309,6 +3320,7 @@ packages:
         optional: true
     dependencies:
       '@vercel/postgres': 0.10.0
+      postgres: 3.4.8
     dev: false
 
   /dunder-proto@1.0.1:
@@ -4924,6 +4936,11 @@ packages:
 
   /postgres-range@1.1.4:
     resolution: {integrity: sha512-i/hbxIE9803Alj/6ytL7UHQxRvZkI9O4Sy+J3HGc4F4oo/2eQAjTSNJ0bfxyse3bH0nuVesCk+3IRLaMtG3H6w==}
+    dev: false
+
+  /postgres@3.4.8:
+    resolution: {integrity: sha512-d+JFcLM17njZaOLkv6SCev7uoLaBtfK86vMUXhW1Z4glPWh4jozno9APvW/XKFJ3CCxVoC7OL38BqRydtu5nGg==}
+    engines: {node: '>=12'}
     dev: false
 
   /prelude-ls@1.2.1:

@@ -2,6 +2,8 @@ export interface Env {
   SITE_BUCKET: R2Bucket;
 }
 
+const DOMAIN = "shipartifact.com";
+
 const RESERVED_SUBDOMAINS = [
   "api",
   "www",
@@ -40,8 +42,8 @@ function notFoundPage(slug: string): string {
 <body>
   <div class="container">
     <h1>404</h1>
-    <p>${slug}.shipartifact.com does not exist yet.</p>
-    <a href="https://shipartifact.com">Create it on ShipArtifact &rarr;</a>
+    <p>${slug}.${DOMAIN} does not exist yet.</p>
+    <a href="https://${DOMAIN}">Create it on ShipArtifact &rarr;</a>
   </div>
 </body>
 </html>`;
@@ -59,12 +61,12 @@ export default {
     const parts = hostname.split(".");
     if (
       parts.length < 3 ||
-      hostname === "shipartifact.com" ||
-      hostname === "www.shipartifact.com"
+      hostname === DOMAIN ||
+      hostname === `www.${DOMAIN}`
     ) {
       // Root domain — redirect to main site on Vercel
       return Response.redirect(
-        "https://shipartifact.com" + url.pathname,
+        `https://${DOMAIN}${url.pathname}`,
         301
       );
     }

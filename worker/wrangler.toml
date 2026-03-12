@@ -1,0 +1,12 @@
+name = "shipartifact-sites"
+main = "src/index.ts"
+compatibility_date = "2024-12-01"
+
+[[r2_buckets]]
+binding = "SITE_BUCKET"
+bucket_name = "shipartifact-sites"
+
+# Uncomment and configure after adding domain to Cloudflare:
+# [routes]
+# pattern = "*.shipartifact.com/*"
+# zone_name = "shipartifact.com"

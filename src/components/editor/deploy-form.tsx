@@ -77,7 +77,7 @@ export function DeployForm({
         } else if (res.status === 403) {
           setSlugStatus("taken");
         } else {
-          setSlugStatus("available");
+          setSlugStatus("idle");
         }
       } catch {
         setSlugStatus("idle");

@@ -96,6 +96,8 @@ const AI_PROXY_SCRIPT = `<script>
 })();
 </script>`;
 
+const FAVICON_LINK = `<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='none' stroke='%236366f1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5'/%3E%3Cpath d='M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09'/%3E%3Cpath d='M9 12a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.4 22.4 0 0 1-4 2z'/%3E%3Cpath d='M9 12H4s.55-3.03 2-4c1.62-1.08 5 .05 5 .05'/%3E%3C/svg%3E" />`;
+
 const BADGE_HTML = `
   <div style="position:fixed;bottom:8px;right:8px;opacity:0.5;font-size:11px;font-family:sans-serif;z-index:99999;">
     <a href="https://shipartifact.com" target="_blank" rel="noopener" style="color:#888;text-decoration:none;transition:opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">
@@ -126,6 +128,7 @@ export function wrapJsxArtifact(
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta name="twitter:card" content="summary_large_image" />
+  ${FAVICON_LINK}
   ${options?.usesAi ? AI_PROXY_SCRIPT : ""}
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
@@ -163,11 +166,35 @@ export function wrapHtmlArtifact(
   if (trimmed.match(/^<!DOCTYPE/i) || trimmed.match(/^<html/i)) {
     let html = trimmed;
 
-    // Inject meta tags into <head> if not present
+    // Inject title into <head> if not present
     if (!html.includes("<title>")) {
       html = html.replace(
         /<head([^>]*)>/i,
         `<head$1>\n  <title>${escapeHtml(meta.title)}</title>`
+      );
+    }
+
+    // Inject OG meta tags if not present
+    if (!html.includes("og:image")) {
+      const ogTags = `
+  <meta property="og:title" content="${escapeHtml(meta.title)}" />
+  <meta property="og:description" content="${escapeHtml(desc)}" />
+  <meta property="og:url" content="https://${meta.slug}.${SITES_DOMAIN}" />
+  <meta property="og:image" content="${APP_URL}/api/og" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />`;
+      html = html.replace(
+        /<head([^>]*)>/i,
+        `<head$1>${ogTags}`
+      );
+    }
+
+    // Inject favicon if not present
+    if (!html.includes("rel=\"icon\"") && !html.includes("rel='icon'")) {
+      html = html.replace(
+        /<head([^>]*)>/i,
+        `<head$1>\n  ${FAVICON_LINK}`
       );
     }
 
@@ -203,6 +230,7 @@ export function wrapHtmlArtifact(
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta name="twitter:card" content="summary_large_image" />
+  ${FAVICON_LINK}
   ${aiScript}
 </head>
 <body>

@@ -15,6 +15,13 @@
       "when": 1773307542267,
       "tag": "0001_bouncy_preak",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1773377946725,
+      "tag": "0002_unusual_chronomancer",
+      "breakpoints": true
     }
   ]
 }

@@ -145,7 +145,7 @@ export function PreviewPane({ code, title = "Preview" }: PreviewPaneProps) {
             srcDoc={previewHtml}
             sandbox="allow-scripts allow-forms"
             className="h-full w-full"
-            title="Artifact preview"
+            title="Preview"
           />
         ) : (
           <div className="flex h-full items-center justify-center text-sm text-muted-foreground">

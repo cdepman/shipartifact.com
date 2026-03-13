@@ -1,0 +1,1 @@
+ALTER TABLE "sites" ADD COLUMN "showcased" boolean DEFAULT false NOT NULL;

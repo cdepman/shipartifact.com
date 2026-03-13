@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
   }
 
   const body = await req.json();
-  const { slug, title, description, sourceCode } = body;
+  const { slug, title, description, sourceCode, showcased } = body;
 
   // Validate input
   const errors = validateDeployInput({ slug, title, sourceCode });
@@ -85,6 +85,7 @@ export async function POST(req: NextRequest) {
         artifactType,
         currentVersion: version,
         usesAi,
+        ...(showcased !== undefined && { showcased: Boolean(showcased) }),
       });
     } else {
       version = 1;
@@ -96,6 +97,7 @@ export async function POST(req: NextRequest) {
         sourceCode,
         artifactType,
         usesAi,
+        showcased: Boolean(showcased),
       });
     }
 

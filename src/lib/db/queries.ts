@@ -32,9 +32,25 @@ export async function createSite(data: {
   sourceCode: string;
   artifactType: string;
   usesAi?: boolean;
+  showcased?: boolean;
 }) {
   const results = await db.insert(sites).values(data).returning();
   return results[0];
+}
+
+export async function getShowcasedSites() {
+  return db
+    .select({
+      slug: sites.slug,
+      title: sites.title,
+      description: sites.description,
+      artifactType: sites.artifactType,
+      usesAi: sites.usesAi,
+      updatedAt: sites.updatedAt,
+    })
+    .from(sites)
+    .where(eq(sites.showcased, true))
+    .orderBy(desc(sites.updatedAt));
 }
 
 export async function updateSite(
@@ -47,6 +63,7 @@ export async function updateSite(
     currentVersion: number;
     isPublished: boolean;
     usesAi: boolean;
+    showcased: boolean;
   }>
 ) {
   const results = await db

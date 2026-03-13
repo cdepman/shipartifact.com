@@ -11,7 +11,7 @@ interface CodeEditorProps {
 export function CodeEditor({
   value,
   onChange,
-  placeholder = "Paste your Claude artifact code here...",
+  placeholder = "Paste your code here...",
 }: CodeEditorProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 

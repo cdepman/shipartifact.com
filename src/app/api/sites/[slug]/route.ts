@@ -62,7 +62,7 @@ export async function PATCH(
   }
 
   const body = await req.json();
-  const { title, description } = body;
+  const { title, description, showcased } = body;
 
   if (title !== undefined && (!title || title.trim().length === 0)) {
     return NextResponse.json(
@@ -81,6 +81,7 @@ export async function PATCH(
   const updated = await updateSite(slug, {
     ...(title !== undefined && { title }),
     ...(description !== undefined && { description }),
+    ...(showcased !== undefined && { showcased: Boolean(showcased) }),
   });
 
   return NextResponse.json({ site: updated });

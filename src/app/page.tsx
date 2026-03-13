@@ -1,7 +1,9 @@
 import { Navbar } from "@/components/shared/navbar";
 import { CtaButton } from "@/components/landing/cta-button";
 import { PromptCopySection } from "@/components/landing/prompt-copy-section";
-import { Sparkles, Eye, Globe, UserX, Link } from "lucide-react";
+import { ShowcaseCarousel } from "@/components/landing/showcase-carousel";
+import { Sparkles, Eye, Globe, UserX, Link as LinkIcon } from "lucide-react";
+import NextLink from "next/link";
 
 const STEPS = [
   {
@@ -127,7 +129,7 @@ export default function LandingPage() {
           </div>
           <div className="flex gap-4">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10">
-              <Link size={20} className="text-primary" />
+              <LinkIcon size={20} className="text-primary" />
             </div>
             <div>
               <h3 className="font-semibold">A clean link you can share</h3>
@@ -139,6 +141,9 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* Showcase */}
+      <ShowcaseCarousel />
 
       {/* Try this in Claude */}
       <section className="border-t border-border py-20">
@@ -211,8 +216,11 @@ export default function LandingPage() {
 
       {/* Footer */}
       <footer className="border-t border-border py-8">
-        <div className="mx-auto max-w-4xl px-6 text-center text-sm text-muted-foreground">
+        <div className="mx-auto flex max-w-4xl flex-col items-center gap-3 px-6 text-sm text-muted-foreground sm:flex-row sm:justify-between">
           <p>&copy; {new Date().getFullYear()} PushToStart</p>
+          <NextLink href="/showcase" className="transition-colors hover:text-foreground">
+            Showcase
+          </NextLink>
         </div>
       </footer>
     </div>

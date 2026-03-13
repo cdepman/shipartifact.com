@@ -21,6 +21,7 @@ interface SiteData {
   sourceCode: string;
   artifactType: string;
   currentVersion: number;
+  showcased: boolean;
   url: string;
   createdAt: string;
   updatedAt: string;
@@ -44,6 +45,7 @@ export default function SiteDetailPage() {
   const [copied, setCopied] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [togglingShowcase, setTogglingShowcase] = useState(false);
 
   useEffect(() => {
     async function fetchSite() {
@@ -70,6 +72,26 @@ export default function SiteDetailPage() {
     await navigator.clipboard.writeText(site.url);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const toggleShowcase = async () => {
+    if (!site) return;
+    setTogglingShowcase(true);
+    try {
+      const res = await fetch(`/api/sites/${slug}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ showcased: !site.showcased }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setSite(data.site);
+      }
+    } catch {
+      // ignore
+    } finally {
+      setTogglingShowcase(false);
+    }
   };
 
   const handleDelete = async () => {
@@ -199,6 +221,31 @@ export default function SiteDetailPage() {
               Delete
             </button>
           )}
+        </div>
+
+        {/* Showcase toggle */}
+        <div className="mb-8 flex items-center justify-between rounded-xl border border-border p-4">
+          <div>
+            <h3 className="text-sm font-medium">Showcase</h3>
+            <p className="text-xs text-muted-foreground">
+              Feature this creation in the public gallery
+            </p>
+          </div>
+          <button
+            onClick={toggleShowcase}
+            disabled={togglingShowcase}
+            className="relative h-6 w-11 rounded-full transition-colors disabled:opacity-50"
+            style={{ backgroundColor: site.showcased ? "var(--primary)" : "var(--muted)" }}
+          >
+            <div
+              className="absolute left-0.5 top-0.5 h-5 w-5 rounded-full transition-transform"
+              style={{
+                backgroundColor: site.showcased ? "#fff" : "var(--foreground)",
+                opacity: site.showcased ? 1 : 0.5,
+                transform: site.showcased ? "translateX(20px)" : "translateX(0)",
+              }}
+            />
+          </button>
         </div>
 
         {/* Deployment history */}

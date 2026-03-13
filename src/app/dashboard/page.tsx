@@ -18,8 +18,8 @@ export default async function DashboardPage() {
           <h1 className="text-2xl font-bold">Your Sites</h1>
           <p className="text-sm text-muted-foreground">
             {sites.length > 0
-              ? `${sites.length} launched artifact${sites.length === 1 ? "" : "s"}`
-              : "Launch your Claude artifacts as live websites"}
+              ? `${sites.length} published site${sites.length === 1 ? "" : "s"}`
+              : "Publish your Claude creations as live websites"}
           </p>
         </div>
       </div>

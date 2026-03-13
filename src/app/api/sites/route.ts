@@ -18,6 +18,7 @@ export async function GET() {
     description: site.description,
     artifactType: site.artifactType,
     currentVersion: site.currentVersion,
+    showcased: site.showcased,
     url: `https://${site.slug}.${SITES_DOMAIN}`,
     createdAt: site.createdAt,
     updatedAt: site.updatedAt,

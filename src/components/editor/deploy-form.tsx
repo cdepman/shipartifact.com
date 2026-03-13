@@ -8,9 +8,11 @@ interface DeployFormProps {
   slug: string;
   title: string;
   description: string;
+  showcased: boolean;
   onSlugChange: (slug: string) => void;
   onTitleChange: (title: string) => void;
   onDescriptionChange: (description: string) => void;
+  onShowcasedChange: (showcased: boolean) => void;
   onDeploy: () => void;
   isDeploying: boolean;
   isRedeploy?: boolean;
@@ -31,9 +33,11 @@ export function DeployForm({
   slug,
   title,
   description,
+  showcased,
   onSlugChange,
   onTitleChange,
   onDescriptionChange,
+  onShowcasedChange,
   onDeploy,
   isDeploying,
   isRedeploy = false,
@@ -195,6 +199,26 @@ export function DeployForm({
           <span>This creation uses AI — API calls will be proxied through PushToStart</span>
         </div>
       )}
+
+      {/* Showcase toggle */}
+      <label className="flex cursor-pointer items-center gap-3">
+        <div className="relative">
+          <input
+            type="checkbox"
+            checked={showcased}
+            onChange={(e) => onShowcasedChange(e.target.checked)}
+            className="peer sr-only"
+          />
+          <div className="h-5 w-9 rounded-full bg-muted transition-colors peer-checked:bg-primary" />
+          <div className="absolute left-0.5 top-0.5 h-4 w-4 rounded-full bg-foreground/80 transition-transform peer-checked:translate-x-4 peer-checked:bg-white" />
+        </div>
+        <div>
+          <span className="text-sm font-medium">Add to Showcase</span>
+          <p className="text-xs text-muted-foreground">
+            Feature this creation in the public gallery
+          </p>
+        </div>
+      </label>
 
       {/* Launch button */}
       <button

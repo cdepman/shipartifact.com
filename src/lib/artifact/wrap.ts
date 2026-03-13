@@ -82,17 +82,54 @@ const AI_PROXY_SCRIPT = `<script>
     if (d.startsWith('UklGR')) return 'image/webp';
     return null;
   }
+  function __ptsConvertImage(b64, mediaType) {
+    var d = b64.replace(/^data:.*?,/, '');
+    var known = __ptsDetectFmt(d);
+    if (known) return Promise.resolve({ data: d, media_type: known });
+    return new Promise(function(resolve) {
+      var img = new Image();
+      img.onload = function() {
+        var c = document.createElement('canvas');
+        var w = img.naturalWidth, h = img.naturalHeight;
+        var max = 2048;
+        if (w > max || h > max) {
+          var s = Math.min(max / w, max / h);
+          w = Math.round(w * s); h = Math.round(h * s);
+        }
+        c.width = w; c.height = h;
+        c.getContext('2d').drawImage(img, 0, 0, w, h);
+        var out = c.toDataURL('image/jpeg', 0.85).split(',')[1];
+        resolve({ data: out, media_type: 'image/jpeg' });
+      };
+      img.onerror = function() {
+        resolve({ data: d, media_type: mediaType || 'image/png' });
+      };
+      img.src = 'data:' + (mediaType || 'image/png') + ';base64,' + d;
+    });
+  }
   function __ptsFixImages(obj) {
-    if (!obj || typeof obj !== 'object') return;
-    if (Array.isArray(obj)) { obj.forEach(__ptsFixImages); return; }
-    if (obj.type === 'base64' && obj.data && (obj.media_type || obj.mediaType)) {
-      var detected = __ptsDetectFmt(obj.data);
-      if (detected) {
-        if (obj.media_type) obj.media_type = detected;
-        if (obj.mediaType) obj.mediaType = detected;
-      }
+    if (!obj || typeof obj !== 'object') return Promise.resolve();
+    if (Array.isArray(obj)) {
+      return obj.reduce(function(p, item) {
+        return p.then(function() { return __ptsFixImages(item); });
+      }, Promise.resolve());
     }
-    Object.keys(obj).forEach(function(k) { __ptsFixImages(obj[k]); });
+    var work = Promise.resolve();
+    if (obj.type === 'base64' && typeof obj.data === 'string' && (obj.media_type || obj.mediaType)) {
+      work = __ptsConvertImage(obj.data, obj.media_type || obj.mediaType).then(function(r) {
+        obj.data = r.data;
+        if (obj.media_type) obj.media_type = r.media_type;
+        if (obj.mediaType) obj.mediaType = r.media_type;
+      });
+    }
+    return work.then(function() {
+      var keys = Object.keys(obj);
+      return keys.reduce(function(p, k) {
+        return p.then(function() {
+          if (obj[k] && typeof obj[k] === 'object') return __ptsFixImages(obj[k]);
+        });
+      }, Promise.resolve());
+    });
   }
   var _origFetch = window.fetch;
   window.fetch = function(url, opts) {
@@ -110,7 +147,16 @@ const AI_PROXY_SCRIPT = `<script>
       delete newHeaders['anthropic-dangerous-direct-browser-access'];
       var newBody = opts && opts.body;
       if (typeof newBody === 'string') {
-        try { var p = JSON.parse(newBody); __ptsFixImages(p); newBody = JSON.stringify(p); } catch(e) {}
+        try {
+          var p = JSON.parse(newBody);
+          if (p.messages) {
+            return __ptsFixImages(p.messages).then(function() {
+              return _origFetch.call(window, proxyUrl, Object.assign({}, opts, {
+                headers: newHeaders, body: JSON.stringify(p)
+              }));
+            });
+          }
+        } catch(e) {}
       }
       var newOpts = Object.assign({}, opts, { headers: newHeaders, body: newBody });
       return _origFetch.call(window, proxyUrl, newOpts);

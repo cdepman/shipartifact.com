@@ -6,10 +6,12 @@ import { CodeEditor } from "@/components/editor/code-editor";
 import { PreviewPane } from "@/components/editor/preview-pane";
 import { DeployForm } from "@/components/editor/deploy-form";
 import { SharePreview } from "@/components/editor/share-preview";
+import { ScanReadout } from "@/components/editor/scan-readout";
 import { Navbar } from "@/components/shared/navbar";
 import { ExternalLink, PartyPopper } from "lucide-react";
 import { SITES_DOMAIN } from "@/lib/constants";
 import { extractTitle, detectsAiUsage } from "@/lib/artifact/detect";
+import { scanAndFix, type ScanResult } from "@/lib/artifact/scan";
 
 export default function NewSitePage() {
   return (
@@ -36,19 +38,23 @@ function NewSitePageInner() {
     slug: string;
   } | null>(null);
   const [usesAi, setUsesAi] = useState(false);
+  const [scanResult, setScanResult] = useState<ScanResult | null>(null);
+  const [isScanning, setIsScanning] = useState(false);
   const titleManuallyEdited = useRef(false);
+  const scanTimeout = useRef<ReturnType<typeof setTimeout>>(null);
 
   // Auto-extract title from pasted code and generate slug
   const handleCodeChange = useCallback(
     (newCode: string) => {
       setCode(newCode);
-      setUsesAi(detectsAiUsage(newCode));
+
+      const ai = detectsAiUsage(newCode);
+      setUsesAi(ai);
 
       if (!titleManuallyEdited.current && !isRedeploy) {
         const extracted = extractTitle(newCode);
         if (extracted) {
           setTitle(extracted);
-          // Also auto-generate slug from extracted title
           const autoSlug = extracted
             .toLowerCase()
             .replace(/[^a-z0-9\s-]/g, "")
@@ -58,6 +64,21 @@ function NewSitePageInner() {
           setSlug(autoSlug);
         }
       }
+
+      // Debounced scan — only run on non-trivial code
+      if (scanTimeout.current) clearTimeout(scanTimeout.current);
+      if (newCode.trim().length < 50) {
+        setScanResult(null);
+        setIsScanning(false);
+        return;
+      }
+
+      setIsScanning(true);
+      scanTimeout.current = setTimeout(() => {
+        const result = scanAndFix(newCode, ai);
+        setScanResult(result);
+        setIsScanning(false);
+      }, 500);
     },
     [isRedeploy]
   );
@@ -100,7 +121,7 @@ function NewSitePageInner() {
           slug,
           title: title || slug,
           description,
-          sourceCode: code,
+          sourceCode: scanResult?.fixedCode || code,
         }),
       });
 
@@ -194,8 +215,17 @@ function NewSitePageInner() {
 
         <div className="grid gap-6 lg:grid-cols-2" style={{ height: "60vh" }}>
           <CodeEditor value={code} onChange={handleCodeChange} />
-          <PreviewPane code={code} title={title || slug || "Preview"} />
+          <PreviewPane
+            code={scanResult?.fixedCode || code}
+            title={title || slug || "Preview"}
+          />
         </div>
+
+        {(isScanning || scanResult) && (
+          <div className="mx-auto mt-4 max-w-3xl">
+            <ScanReadout isScanning={isScanning} result={scanResult} />
+          </div>
+        )}
 
         <div className="mx-auto mt-6 grid max-w-3xl items-start gap-8 lg:grid-cols-[1fr_auto]">
           <DeployForm

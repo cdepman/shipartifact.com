@@ -7,7 +7,7 @@ const EXAMPLE_PROMPTS = [
   {
     label: "Explain This Photo Like I'm 5",
     prompt:
-      "Build me an app where I can upload a photo or take a picture, and it looks at the photo and explains the main things it sees in simple words that a 5-year-old would understand. Make it playful and colorful with big text and friendly vibes. It should pick out the 2-3 most interesting things in the photo.",
+      "Build me an app where I can upload a photo or take a picture, and it looks at the photo and explains the main things it sees in simple but not too dumbed-down words that a 10-year-old would understand. Make it playful and colorful with big text and friendly vibes for that age range. It should pick out the 1-3 most central things in the photo.",
   },
   {
     label: "Recipe Inventor",

@@ -47,7 +47,7 @@ export function CodeEditor({
         onKeyDown={handleKeyDown}
         placeholder={placeholder}
         spellCheck={false}
-        className="h-full w-full resize-none rounded-xl border border-border bg-[#0d1117] p-4 font-mono text-sm leading-relaxed text-[#c9d1d9] placeholder:text-muted-foreground/50 focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/30"
+        className="h-full w-full resize-none rounded-xl border border-border bg-[#0d1117] p-4 font-mono text-base leading-relaxed text-[#c9d1d9] placeholder:text-muted-foreground/50 focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/30 sm:text-sm"
         style={{ tabSize: 2 }}
       />
       {value && (

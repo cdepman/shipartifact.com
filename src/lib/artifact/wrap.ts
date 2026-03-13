@@ -86,22 +86,28 @@ const AI_PROXY_SCRIPT = `<script>
     var d = b64.replace(/^data:.*?,/, '');
     var known = __ptsDetectFmt(d);
     var fmt = known || mediaType || 'image/png';
-    var tooBig = d.length > 3500000;
-    if (known && !tooBig) return Promise.resolve({ data: d, media_type: known });
+    var MAX_B64 = 6000000;
+    if (known && d.length <= MAX_B64) return Promise.resolve({ data: d, media_type: known });
     return new Promise(function(resolve) {
       var img = new Image();
       img.onload = function() {
         var c = document.createElement('canvas');
         var w = img.naturalWidth, h = img.naturalHeight;
-        var max = 1568;
+        var max = 2048;
         if (w > max || h > max) {
           var s = Math.min(max / w, max / h);
           w = Math.round(w * s); h = Math.round(h * s);
         }
         c.width = w; c.height = h;
         c.getContext('2d').drawImage(img, 0, 0, w, h);
-        var out = c.toDataURL('image/jpeg', 0.8).split(',')[1];
-        resolve({ data: out, media_type: 'image/jpeg' });
+        var quals = [0.92, 0.82, 0.7];
+        for (var i = 0; i < quals.length; i++) {
+          var out = c.toDataURL('image/jpeg', quals[i]).split(',')[1];
+          if (out.length <= MAX_B64 || i === quals.length - 1) {
+            resolve({ data: out, media_type: 'image/jpeg' });
+            return;
+          }
+        }
       };
       img.onerror = function() {
         resolve({ data: d, media_type: fmt });

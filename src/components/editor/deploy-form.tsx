@@ -126,7 +126,7 @@ export function DeployForm({
           value={title}
           onChange={(e) => handleTitleChange(e.target.value)}
           placeholder="My Awesome App"
-          className="w-full rounded-lg border border-border bg-muted px-3 py-2 text-sm focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/30"
+          className="w-full rounded-lg border border-border bg-muted px-3 py-2 text-base focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/30 sm:text-sm"
         />
         {errors.title && (
           <p className="mt-1 text-xs text-red-400">{errors.title}</p>
@@ -143,9 +143,9 @@ export function DeployForm({
             onChange={(e) => handleSlugChange(e.target.value)}
             placeholder="my-cool-app"
             disabled={isRedeploy}
-            className="flex-1 rounded-l-lg border border-border bg-muted px-3 py-2 text-sm focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/30 disabled:opacity-60"
+            className="flex-1 rounded-l-lg border border-border bg-muted px-3 py-2 text-base focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/30 disabled:opacity-60 sm:text-sm"
           />
-          <div className="flex items-center gap-1 rounded-r-lg border border-l-0 border-border bg-muted/50 px-3 py-2 text-sm text-muted-foreground">
+          <div className="flex items-center gap-1 rounded-r-lg border border-l-0 border-border bg-muted/50 px-2 py-2 text-xs text-muted-foreground sm:px-3 sm:text-sm">
             .{SITES_DOMAIN}
             {slugStatus === "checking" && (
               <Loader2 size={14} className="animate-spin" />
@@ -184,7 +184,7 @@ export function DeployForm({
           value={description}
           onChange={(e) => onDescriptionChange(e.target.value)}
           placeholder="A brief description of your site"
-          className="w-full rounded-lg border border-border bg-muted px-3 py-2 text-sm focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/30"
+          className="w-full rounded-lg border border-border bg-muted px-3 py-2 text-base focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/30 sm:text-sm"
         />
       </div>
 

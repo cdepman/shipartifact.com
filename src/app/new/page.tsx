@@ -153,7 +153,7 @@ function NewSitePageInner() {
     return (
       <>
         <Navbar />
-        <div className="flex min-h-[80vh] items-center justify-center px-6">
+        <div className="flex min-h-[80vh] items-center justify-center px-4 sm:px-6">
           <div className="max-w-md text-center">
             <PartyPopper
               size={48}
@@ -203,22 +203,26 @@ function NewSitePageInner() {
   return (
     <>
       <Navbar />
-      <div className="mx-auto max-w-7xl px-6 py-6">
-        <h1 className="mb-1 text-2xl font-bold">
+      <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 sm:py-6">
+        <h1 className="mb-1 text-xl font-bold sm:text-2xl">
           {isRedeploy ? `Relaunch ${slug}` : "Launch New Site"}
         </h1>
-        <p className="mb-6 text-sm text-muted-foreground">
+        <p className="mb-4 text-sm text-muted-foreground sm:mb-6">
           {isRedeploy
             ? "Update the code and relaunch."
             : "Paste your code here, preview it, and ship it."}
         </p>
 
-        <div className="grid gap-6 lg:grid-cols-2" style={{ height: "60vh" }}>
-          <CodeEditor value={code} onChange={handleCodeChange} />
-          <PreviewPane
-            code={scanResult?.fixedCode || code}
-            title={title || slug || "Preview"}
-          />
+        <div className="grid gap-4 sm:gap-6 lg:grid-cols-2" style={{ minHeight: "40vh" }}>
+          <div className="h-[40vh] sm:h-[50vh] lg:h-[60vh]">
+            <CodeEditor value={code} onChange={handleCodeChange} />
+          </div>
+          <div className="h-[40vh] sm:h-[50vh] lg:h-[60vh]">
+            <PreviewPane
+              code={scanResult?.fixedCode || code}
+              title={title || slug || "Preview"}
+            />
+          </div>
         </div>
 
         {(isScanning || scanResult) && (

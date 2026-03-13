@@ -85,26 +85,28 @@ const AI_PROXY_SCRIPT = `<script>
   function __ptsConvertImage(b64, mediaType) {
     var d = b64.replace(/^data:.*?,/, '');
     var known = __ptsDetectFmt(d);
-    if (known) return Promise.resolve({ data: d, media_type: known });
+    var fmt = known || mediaType || 'image/png';
+    var tooBig = d.length > 3500000;
+    if (known && !tooBig) return Promise.resolve({ data: d, media_type: known });
     return new Promise(function(resolve) {
       var img = new Image();
       img.onload = function() {
         var c = document.createElement('canvas');
         var w = img.naturalWidth, h = img.naturalHeight;
-        var max = 2048;
+        var max = 1568;
         if (w > max || h > max) {
           var s = Math.min(max / w, max / h);
           w = Math.round(w * s); h = Math.round(h * s);
         }
         c.width = w; c.height = h;
         c.getContext('2d').drawImage(img, 0, 0, w, h);
-        var out = c.toDataURL('image/jpeg', 0.85).split(',')[1];
+        var out = c.toDataURL('image/jpeg', 0.8).split(',')[1];
         resolve({ data: out, media_type: 'image/jpeg' });
       };
       img.onerror = function() {
-        resolve({ data: d, media_type: mediaType || 'image/png' });
+        resolve({ data: d, media_type: fmt });
       };
-      img.src = 'data:' + (mediaType || 'image/png') + ';base64,' + d;
+      img.src = 'data:' + fmt + ';base64,' + d;
     });
   }
   function __ptsFixImages(obj) {

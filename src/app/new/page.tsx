@@ -30,7 +30,6 @@ function NewSitePageInner() {
   const [slug, setSlug] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [showcased, setShowcased] = useState(false);
   const [isDeploying, setIsDeploying] = useState(false);
   const [isRedeploy, setIsRedeploy] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -101,7 +100,6 @@ function NewSitePageInner() {
         setSlug(data.site.slug);
         setTitle(data.site.title);
         setDescription(data.site.description || "");
-        setShowcased(data.site.showcased || false);
         setCode(data.site.sourceCode);
         setIsRedeploy(true);
       } catch {
@@ -123,7 +121,6 @@ function NewSitePageInner() {
           slug,
           title: title || slug,
           description,
-          showcased,
           sourceCode: scanResult?.fixedCode || code,
         }),
       });
@@ -189,7 +186,6 @@ function NewSitePageInner() {
                   setSlug("");
                   setTitle("");
                   setDescription("");
-                  setShowcased(false);
                   setIsRedeploy(false);
                   titleManuallyEdited.current = false;
                 }}
@@ -240,11 +236,9 @@ function NewSitePageInner() {
             slug={slug}
             title={title}
             description={description}
-            showcased={showcased}
             onSlugChange={setSlug}
             onTitleChange={handleTitleChange}
             onDescriptionChange={setDescription}
-            onShowcasedChange={setShowcased}
             onDeploy={handleDeploy}
             isDeploying={isDeploying}
             isRedeploy={isRedeploy}

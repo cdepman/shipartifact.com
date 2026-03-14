@@ -25,7 +25,9 @@ export const SLUG_REGEX = /^[a-z0-9][a-z0-9-]{1,61}[a-z0-9]$/;
 
 export const MAX_CODE_LENGTH = 500_000; // 500KB
 
-export const MAX_SITES_FREE_TIER = 3;
+export const MAX_SITES_FREE_TIER = 25;
+
+export const ADMIN_USER_IDS = (process.env.ADMIN_USER_IDS || "").split(",").filter(Boolean);
 
 export const SITES_DOMAIN =
   process.env.NEXT_PUBLIC_SITES_DOMAIN || "pushtostart.ai";

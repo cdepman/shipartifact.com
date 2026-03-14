@@ -98,8 +98,16 @@ export function SharePreview({ slug, title, ogImage, hasCode }: SharePreviewProp
                       className="h-full w-full object-cover object-top"
                     />
                   ) : isGenerating ? (
-                    <div className="absolute inset-0 overflow-hidden bg-[#06080d]">
+                    <div className="absolute inset-0 flex items-center justify-center overflow-hidden bg-[#0a0c14]">
                       <div className="og-shimmer absolute inset-0" />
+                      <div className="relative flex flex-col items-center gap-1.5">
+                        <div className="flex gap-1">
+                          <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-primary" style={{ animationDelay: "0ms" }} />
+                          <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-primary" style={{ animationDelay: "150ms" }} />
+                          <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-primary" style={{ animationDelay: "300ms" }} />
+                        </div>
+                        <span className="text-[8px] font-medium text-white/60">Generating preview</span>
+                      </div>
                     </div>
                   ) : (
                     /* eslint-disable-next-line @next/next/no-img-element */

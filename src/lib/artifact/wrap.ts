@@ -229,7 +229,7 @@ export function wrapJsxArtifact(
   <meta property="og:url" content="https://${meta.slug}.${SITES_DOMAIN}" />
   <meta property="og:image" content="https://${meta.slug}.${SITES_DOMAIN}/og.png" />
   <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
+  <meta property="og:image:height" content="1200" />
   <meta name="twitter:card" content="summary_large_image" />
   ${FAVICON_LINK}
   ${options?.usesAi ? AI_PROXY_SCRIPT : ""}
@@ -285,7 +285,7 @@ export function wrapHtmlArtifact(
   <meta property="og:url" content="https://${meta.slug}.${SITES_DOMAIN}" />
   <meta property="og:image" content="https://${meta.slug}.${SITES_DOMAIN}/og.png" />
   <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
+  <meta property="og:image:height" content="1200" />
   <meta name="twitter:card" content="summary_large_image" />`;
       html = html.replace(
         /<head([^>]*)>/i,
@@ -331,7 +331,7 @@ export function wrapHtmlArtifact(
   <meta property="og:url" content="https://${meta.slug}.${SITES_DOMAIN}" />
   <meta property="og:image" content="https://${meta.slug}.${SITES_DOMAIN}/og.png" />
   <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
+  <meta property="og:image:height" content="1200" />
   <meta name="twitter:card" content="summary_large_image" />
   ${FAVICON_LINK}
   ${aiScript}

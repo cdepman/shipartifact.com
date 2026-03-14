@@ -121,17 +121,16 @@ function NewSitePageInner() {
               logging: false,
             });
 
-            // Crop to OG aspect ratio (1200x630) from the top of the mobile view
-            const ogW = 1200;
-            const ogH = 630;
-            const srcH = Math.round(fullCanvas.width * (ogH / ogW));
+            // Crop to square (1200x1200) from top of mobile view — tall cards look great in iMessage
+            const ogSize = 1200;
+            const srcH = Math.min(fullCanvas.height, fullCanvas.width);
             const crop = document.createElement("canvas");
-            crop.width = ogW;
-            crop.height = ogH;
+            crop.width = ogSize;
+            crop.height = ogSize;
             crop.getContext("2d")!.drawImage(
               fullCanvas,
               0, 0, fullCanvas.width, srcH,
-              0, 0, ogW, ogH
+              0, 0, ogSize, ogSize
             );
 
             setOgImage(crop.toDataURL("image/png"));

@@ -6,13 +6,16 @@ interface SharePreviewProps {
   slug: string;
   title: string;
   ogImage?: string | null;
+  hasCode?: boolean;
 }
 
-export function SharePreview({ slug, title, ogImage }: SharePreviewProps) {
+export function SharePreview({ slug, title, ogImage, hasCode }: SharePreviewProps) {
   const displayTitle = title || slug || "My App";
   const displayUrl = slug
     ? `${slug}.${SITES_DOMAIN}`
     : `your-site.${SITES_DOMAIN}`;
+
+  const isGenerating = hasCode && !ogImage;
 
   return (
     <div className="flex flex-col items-center">
@@ -87,16 +90,24 @@ export function SharePreview({ slug, title, ogImage }: SharePreviewProps) {
               <div className="overflow-hidden rounded-2xl rounded-tr-md bg-[#007AFF]">
                 {/* OG image */}
                 <div className="relative h-[110px] overflow-hidden bg-[#06080d]">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={ogImage || "/api/og"}
-                    alt="Site preview"
-                    className="h-full w-full object-cover"
-                  />
-                  {!ogImage && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-[#06080d]/60">
-                      <span className="text-[9px] text-white/50">Generating preview...</span>
+                  {ogImage ? (
+                    /* eslint-disable-next-line @next/next/no-img-element */
+                    <img
+                      src={ogImage}
+                      alt="Site preview"
+                      className="h-full w-full object-cover object-top"
+                    />
+                  ) : isGenerating ? (
+                    <div className="absolute inset-0 overflow-hidden bg-[#06080d]">
+                      <div className="og-shimmer absolute inset-0" />
                     </div>
+                  ) : (
+                    /* eslint-disable-next-line @next/next/no-img-element */
+                    <img
+                      src="/api/og"
+                      alt="PushToStart"
+                      className="h-full w-full object-cover"
+                    />
                   )}
                 </div>
 

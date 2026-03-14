@@ -108,17 +108,33 @@ function NewSitePageInner() {
             const doc = iframe.contentDocument;
             if (!doc?.body) return;
 
-            const canvas = await html2canvas(doc.body, {
-              width: 1200,
-              height: 630,
-              windowWidth: 1200,
-              windowHeight: 630,
-              scale: 1,
+            // Render at mobile width, capture top portion
+            const captureW = 390;
+            const captureH = 844;
+            const fullCanvas = await html2canvas(doc.body, {
+              width: captureW,
+              height: captureH,
+              windowWidth: captureW,
+              windowHeight: captureH,
+              scale: 2,
               useCORS: true,
               logging: false,
             });
 
-            setOgImage(canvas.toDataURL("image/png"));
+            // Crop to OG aspect ratio (1200x630) from the top of the mobile view
+            const ogW = 1200;
+            const ogH = 630;
+            const srcH = Math.round(fullCanvas.width * (ogH / ogW));
+            const crop = document.createElement("canvas");
+            crop.width = ogW;
+            crop.height = ogH;
+            crop.getContext("2d")!.drawImage(
+              fullCanvas,
+              0, 0, fullCanvas.width, srcH,
+              0, 0, ogW, ogH
+            );
+
+            setOgImage(crop.toDataURL("image/png"));
           } catch {
             // Screenshot failed — non-fatal, will use default OG
           }
@@ -304,15 +320,16 @@ function NewSitePageInner() {
               slug={slug}
               title={title}
               ogImage={ogImage}
+              hasCode={code.trim().length > 50}
             />
           </div>
         </div>
       </div>
 
-      {/* Hidden iframe for OG screenshot capture */}
+      {/* Hidden iframe for OG screenshot capture — mobile viewport */}
       <iframe
         ref={screenshotIframeRef}
-        style={{ position: "absolute", left: "-9999px", top: 0, width: 1200, height: 630, border: "none" }}
+        style={{ position: "absolute", left: "-9999px", top: 0, width: 390, height: 844, border: "none" }}
         title="Screenshot capture"
       />
     </>

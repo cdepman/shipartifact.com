@@ -12,7 +12,7 @@ const SCAN_STEPS = [
   "Verifying standalone compatibility...",
 ];
 
-const STEP_DURATION = 400; // ms per step
+const STEP_DURATION = 800; // ms per step
 
 interface ScanReadoutProps {
   isScanning: boolean;

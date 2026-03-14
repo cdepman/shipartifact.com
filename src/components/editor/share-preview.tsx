@@ -89,7 +89,7 @@ export function SharePreview({ slug, title, ogImage, hasCode }: SharePreviewProp
             <div className="mb-3 ml-auto max-w-[210px]">
               <div className="overflow-hidden rounded-2xl rounded-tr-md bg-[#007AFF]">
                 {/* OG image */}
-                <div className="relative h-[180px] overflow-hidden bg-[#06080d]">
+                <div className="relative aspect-square overflow-hidden bg-[#06080d]">
                   {ogImage ? (
                     /* eslint-disable-next-line @next/next/no-img-element */
                     <img

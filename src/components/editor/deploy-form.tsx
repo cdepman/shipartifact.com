@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { SITES_DOMAIN } from "@/lib/constants";
-import { Loader2, Check, X, Sparkles } from "lucide-react";
+import { Loader2, Check, X, Sparkles, AlertCircle } from "lucide-react";
 
 interface DeployFormProps {
   slug: string;
@@ -215,7 +215,10 @@ export function DeployForm({
       </button>
 
       {errors.general && (
-        <p className="text-center text-xs text-red-400">{errors.general}</p>
+        <div className="flex items-start gap-2.5 rounded-lg border border-red-500/30 bg-red-500/10 px-3.5 py-3 text-sm text-red-400">
+          <AlertCircle size={16} className="mt-0.5 shrink-0" />
+          <span>{errors.general}</span>
+        </div>
       )}
     </div>
   );

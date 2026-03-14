@@ -12,7 +12,7 @@ import {
   deleteSite,
 } from "@/lib/db/queries";
 import { uploadSiteToR2, deleteSiteFromR2 } from "@/lib/cloudflare/r2";
-import { SITES_DOMAIN, MAX_SITES_FREE_TIER } from "@/lib/constants";
+import { SITES_DOMAIN, MAX_SITES_FREE_TIER, ADMIN_USER_IDS } from "@/lib/constants";
 
 export async function POST(req: NextRequest) {
   const { userId } = await auth();
@@ -44,16 +44,16 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // Check free tier limit for new sites
-  if (!isRedeploy) {
+  // Check free tier limit for new sites (admins bypass)
+  if (!isRedeploy && !ADMIN_USER_IDS.includes(userId)) {
     const userSites = await getSitesByUserId(userId);
     if (userSites.length >= MAX_SITES_FREE_TIER) {
       return NextResponse.json(
         {
           errors: [
             {
-              field: "slug",
-              message: `Free tier is limited to ${MAX_SITES_FREE_TIER} sites`,
+              field: "general",
+              message: `You've reached the free tier limit of ${MAX_SITES_FREE_TIER} sites. Delete an existing site to launch a new one.`,
             },
           ],
         },

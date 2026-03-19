@@ -10,7 +10,7 @@ interface PreviewPaneProps {
 }
 
 // Client-side wrapping for instant preview (mirrors server-side wrap.ts)
-function wrapForPreview(
+export function wrapForPreview(
   code: string,
   type: ArtifactType,
   title: string

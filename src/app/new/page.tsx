@@ -4,14 +4,14 @@ import { Suspense, useState, useEffect, useCallback, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import html2canvas from "html2canvas";
 import { CodeEditor } from "@/components/editor/code-editor";
-import { PreviewPane } from "@/components/editor/preview-pane";
+import { PreviewPane, wrapForPreview } from "@/components/editor/preview-pane";
 import { DeployForm } from "@/components/editor/deploy-form";
 import { SharePreview } from "@/components/editor/share-preview";
 import { ScanReadout } from "@/components/editor/scan-readout";
 import { Navbar } from "@/components/shared/navbar";
 import { ExternalLink, PartyPopper } from "lucide-react";
 import { SITES_DOMAIN } from "@/lib/constants";
-import { extractTitle, detectsAiUsage } from "@/lib/artifact/detect";
+import { extractTitle, detectsAiUsage, detectArtifactType } from "@/lib/artifact/detect";
 import { scanAndFix, type ScanResult } from "@/lib/artifact/scan";
 
 export default function NewSitePage() {
@@ -100,7 +100,8 @@ function NewSitePageInner() {
       const iframe = screenshotIframeRef.current;
       if (!iframe) return;
 
-      iframe.srcdoc = htmlCode;
+      const artType = detectArtifactType(htmlCode);
+      iframe.srcdoc = wrapForPreview(htmlCode, artType, title || "Preview");
       iframe.onload = () => {
         // Give scripts time to execute (React, Tailwind, etc.)
         setTimeout(async () => {
@@ -140,7 +141,7 @@ function NewSitePageInner() {
         }, 1500);
       };
     }, 2000);
-  }, []);
+  }, [title]);
 
   // Trigger screenshot when preview code changes
   useEffect(() => {
